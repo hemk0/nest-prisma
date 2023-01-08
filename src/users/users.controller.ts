@@ -15,6 +15,22 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Get('/custom')
+  findCustom() {
+    return this.usersService.findAll({
+      where: {
+        OR: [
+          {
+            email: { contains: 'hem' },
+          },
+          {
+            name: { contains: 'hem' },
+          },
+        ],
+      },
+    });
+  }
+
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
@@ -22,7 +38,7 @@ export class UsersController {
 
   @Get()
   findAll() {
-    return this.usersService.findAll();
+    return this.usersService.findAll(null);
   }
 
   @Get(':id')
